@@ -1,0 +1,94 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4vfxtr4yh3r5"]
+
+[ext_resource type="Script" path="res://Scripts/Door.gd" id="1_yyxvr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ojhxt"]
+albedo_color = Color(0.602844, 0.997045, 0.600066, 1)
+
+[sub_resource type="Animation" id="Animation_ioaoc"]
+resource_name = "DoorOpen1"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.55788, 0), Vector3(0, -0.784124, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dkooa"]
+resource_name = "DoorOpen2"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.55788, 0), Vector3(0, 2.54212, 0), Vector3(3.48787e-16, 3.83972, 3.48787e-16)]
+}
+
+[sub_resource type="Animation" id="Animation_37nj3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(3.48787e-16, 1.5708, 3.48787e-16)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ddqrg"]
+_data = {
+"DoorOpen1": SubResource("Animation_ioaoc"),
+"DoorOpen2": SubResource("Animation_dkooa"),
+"RESET": SubResource("Animation_37nj3")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3kug1"]
+size = Vector3(1, 1.84131, 1)
+
+[node name="Door" type="Node3D" node_paths=PackedStringArray("DOOR_ANIMATION")]
+transform = Transform3D(-3.61999e-06, 3.48788e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48786e-16, -3.61999e-06, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+script = ExtResource("1_yyxvr")
+DOOR_ANIMATION = NodePath("AnimationPlayer")
+
+[node name="DoorBody" type="CSGBox3D" parent="."]
+transform = Transform3D(1, -3.48787e-16, -2.68212e-10, 3.48796e-16, 1, -3.48787e-16, -3.05641e-10, 3.48787e-16, 1, -0.0915217, 1.24415, 0.823206)
+use_collision = true
+collision_mask = 2
+size = Vector3(0.139099, 2.50195, 1.64758)
+material = SubResource("StandardMaterial3D_ojhxt")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ddqrg")
+}
+autoplay = "DoorOpen1"
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="Open1" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.999993, 1.13609e-23, -1.33345e-13, -6.53253e-22, 1, 6.38007e-22, 3.18551e-13, -2.99122e-21, 0.999993, 0.590152, 0.915169, 0.822543)
+shape = SubResource("BoxShape3D_3kug1")
+
+[node name="Area3D2" type="Area3D" parent="."]
+transform = Transform3D(1, 0, -1.06534e-10, 0, 1, 0, -1.43962e-10, 0, 1, -1.69915, 0, 0.0219463)
+
+[node name="Open1" type="CollisionShape3D" parent="Area3D2"]
+transform = Transform3D(0.999993, 1.13609e-23, -1.13741e-10, -6.53253e-22, 1, 6.38007e-22, 2.30382e-10, -2.99122e-21, 0.999993, 0.590152, 0.915169, 0.822543)
+shape = SubResource("BoxShape3D_3kug1")

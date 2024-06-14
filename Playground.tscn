@@ -1,0 +1,125 @@
+[gd_scene load_steps=15 format=3 uid="uid://cm8udrk2lmqmh"]
+
+[ext_resource type="PackedScene" uid="uid://cc1m2a1obsyn4" path="res://fpc/character.tscn" id="1_kd36e"]
+[ext_resource type="PackedScene" uid="uid://bi7qe77u04o4x" path="res://Ladder.tscn" id="2_e5pcx"]
+[ext_resource type="PackedScene" uid="uid://c4vfxtr4yh3r5" path="res://Door.tscn" id="3_fxxwe"]
+[ext_resource type="Texture2D" uid="uid://dcwn6gtsto0il" path="res://Assets/templategrid/TemplateGrid_albedo.png" id="4_47ajn"]
+[ext_resource type="Texture2D" uid="uid://bpjo74bq7v2bc" path="res://Assets/templategrid/TemplateGrid_orm.png" id="5_5nngv"]
+[ext_resource type="Material" uid="uid://dyekmgmrpf82s" path="res://Assets/Wall.tres" id="6_hrwfh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_57bt6"]
+
+[sub_resource type="Sky" id="Sky_b2ixg"]
+sky_material = SubResource("ProceduralSkyMaterial_57bt6")
+
+[sub_resource type="Environment" id="Environment_g1elb"]
+background_mode = 2
+sky = SubResource("Sky_b2ixg")
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+reflected_light_source = 2
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+glow_normalized = true
+volumetric_fog_density = 0.0833
+volumetric_fog_emission_energy = 1.2
+volumetric_fog_ambient_inject = 0.24
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_52cgg"]
+albedo_color = Color(0.298039, 1, 1, 1)
+metallic = 0.79
+metallic_specular = 0.61
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kpdxv"]
+albedo_color = Color(1, 0.454902, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_d1j5g"]
+lightmap_size_hint = Vector2i(12, 12)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6vv12"]
+albedo_texture = ExtResource("4_47ajn")
+normal_enabled = true
+normal_texture = ExtResource("5_5nngv")
+uv1_scale = Vector3(10, 10, 10)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yyiaw"]
+albedo_color = Color(0, 0.976378, 0.686984, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.988327, -0.0745075, -0.132885, 0.152348, 0.483354, 0.862067, 1.0387e-08, -0.872249, 0.489063, -9.3073, 6.04004, -3.03423)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g1elb")
+
+[node name="Character" parent="." node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH") instance=ExtResource("1_kd36e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.93348, 1.19209e-07, 0.594131)
+collision_mask = 3
+default_reticle = "res://fpc/reticles/reticle_1.tscn"
+HEAD = NodePath("Head")
+CAMERA = NodePath("Head/Camera")
+HEADBOB_ANIMATION = NodePath("Head/HeadbobAnimation")
+JUMP_ANIMATION = NodePath("Head/JumpAnimation")
+CROUCH_ANIMATION = NodePath("CrouchAnimation")
+COLLISION_MESH = NodePath("Collision")
+
+[node name="Camera" parent="Character/Head" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.999391, -0.0348995, 0, 0.0348995, 0.999391, 0, 0, 0)
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Ladder" parent="Environment" instance=ExtResource("2_e5pcx")]
+transform = Transform3D(-4.37114e-08, 3.48787e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48787e-16, -4.37114e-08, -9.897, -0.012, 8.868)
+
+[node name="LadderMesh" parent="Environment/Ladder" index="0"]
+skeleton = NodePath("../../..")
+
+[node name="Door" parent="Environment" instance=ExtResource("3_fxxwe")]
+transform = Transform3D(-3.61999e-06, 3.48788e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48786e-16, -3.61999e-06, 0.793, 2.08165e-12, 6.344)
+
+[node name="WallsAndFloor" type="Node3D" parent="Environment"]
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Environment/WallsAndFloor"]
+transform = Transform3D(1, -6.97574e-16, 6.97574e-16, 6.97574e-16, 1, -6.97574e-16, -6.97574e-16, 6.97574e-16, 1, -11.0302, 6.16236, 7.21498)
+material_override = SubResource("StandardMaterial3D_52cgg")
+use_collision = true
+size = Vector3(4.35016, 0.177322, 4.09919)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Environment/WallsAndFloor"]
+transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, -11.0247, 3.03804, -2.59172)
+material_override = SubResource("StandardMaterial3D_52cgg")
+use_collision = true
+size = Vector3(7.12781, 1.33048, 22.9103)
+material = SubResource("StandardMaterial3D_kpdxv")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="Environment/WallsAndFloor"]
+transform = Transform3D(40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0)
+use_collision = true
+mesh = SubResource("PlaneMesh_d1j5g")
+material = SubResource("StandardMaterial3D_6vv12")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Environment/WallsAndFloor"]
+transform = Transform3D(0.602108, -0.798415, 0, 0.798415, 0.602108, 0, 0, 0, 1, -5.22937, 1.39804, -3)
+material_override = SubResource("StandardMaterial3D_yyiaw")
+use_collision = true
+size = Vector3(1, 6.31651, 8)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Environment/WallsAndFloor"]
+transform = Transform3D(-4.37114e-08, 3.48787e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48787e-16, -4.37114e-08, 3.68531, 1.25603, 6.34735)
+material_override = ExtResource("6_hrwfh")
+use_collision = true
+size = Vector3(0.322144, 2.50195, 2.4541)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Environment/WallsAndFloor"]
+transform = Transform3D(-4.37114e-08, 3.48787e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48787e-16, -4.37114e-08, -0.458962, 1.25603, 6.34735)
+use_collision = true
+size = Vector3(0.322144, 2.50195, 2.4541)
+material = ExtResource("6_hrwfh")
+
+[editable path="Character"]
+[editable path="Environment/Ladder"]
